@@ -118,7 +118,336 @@
   </div>
 </div>
 
+<!-- سكربت مستقل لفتح نافذة الإدارة فوراً دون انتظار الشبكة -->
+<script>
+  window.isAdminLoggedIn = false;
+
+  window.closeModals = function() {
+    document.getElementById('loginModal').style.display = 'none';
+    document.getElementById('adminModal').style.display = 'none';
+  };
+
+  window.triggerAdminModal = function() {
+    if (window.isAdminLoggedIn && typeof window.openAddModal === 'function') {
+      window.openAddModal();
+    } else {
+      document.getElementById('loginModal').style.display = 'flex';
+    }
+  };
+
+  (function() {
+    let clicks = 0;
+    let clickTimer = null;
+    const titleEl = document.getElementById('storeTitle');
+    if (titleEl) {
+      titleEl.addEventListener('click', function() {
+        clicks++;
+        clearTimeout(clickTimer);
+        if (clicks >= 5) {
+          clicks = 0;
+          window.triggerAdminModal();
+        } else {
+          clickTimer = setTimeout(function() { clicks = 0; }, 2500);
+        }
+      });
+    }
+    if (window.location.hash === '#admin') {
+      window.triggerAdminModal();
+    }
+  })();
+</script>
+
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-  import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy }
+  import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyC7FfNLHV2UFgTvurRLB8rS3guVj0IbtdM",
+    authDomain: "catalog-be02b.firebaseapp.com",
+    projectId: "catalog-be02b",
+    storageBucket: "catalog-be02b.firebasestorage.app",
+    messagingSenderId: "736617678510",
+    appId: "1:736617678510:web:46c6d36bb6e54ba8d2cf3f",
+    measurementId: "G-WX5MM9B0Q5"
+  };
+
+  // رقم الواتساب بدون علامة +
+  const WHATSAPP_NUMBER = "963985145291";
+
+  // قائمة الألوان المعتمدة وأكوادها البصرية
+  const COLOR_MAP = {
+    "أسود": "#111111",
+    "اسود": "#111111",
+    "بيج": "#e5d3b3",
+    "أبيض": "#ffffff",
+    "ابيض": "#ffffff",
+    "سكري": "#f5f0e1",
+    "أخضر": "#1f7a4c",
+    "اخضر": "#1f7a4c",
+    "أحمر": "#dc2626",
+    "احمر": "#dc2626",
+    "قرميدي": "#b4532a",
+    "زهري": "#f472b6",
+    "أزرق شامي": "#1d4ed8",
+    "ازرق شامي": "#1d4ed8",
+    "أزرق فاتح": "#7dd3fc",
+    "ازرق فاتح": "#7dd3fc",
+    "بني": "#6b4423",
+    "أصفر": "#facc15",
+    "اصفر": "#facc15",
+    "فضي": "#cbd5e1"
+  };
+
+  const AVAILABLE_COLORS = [
+    "أسود", "بيج", "أبيض", "سكري", "أخضر", "أحمر",
+    "قرميدي", "زهري", "أزرق شامي", "أزرق فاتح", "بني", "أصفر", "فضي"
+  ];
+
+  function getColorHex(colorName) {
+    const clean = (colorName || "").trim();
+    if (COLOR_MAP[clean]) return COLOR_MAP[clean];
+    if (/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(clean)) return clean;
+    return "#e5e7eb";
+  }
+
+  function normalizeImageUrl(url) {
+    const clean = (url || "").trim();
+    const driveMatch = clean.match(/drive\.google\.com\/file\/d\/([^/]+)/);
+    if (driveMatch && driveMatch[1]) {
+      return `https://lh3.googleusercontent.com/d/${driveMatch[1]}`;
+    }
+    return clean;
+  }
+
+  function renderColorPresets() {
+    const box = document.getElementById("presetColorsBox");
+    box.innerHTML = AVAILABLE_COLORS.map(name => `
+      <button type="button" class="preset-btn" data-color="${name}" onclick="togglePresetColor('${name}')">
+        <span class="color-dot" style="background:${getColorHex(name)}"></span>
+        <span>${name}</span>
+      </button>
+    `).join("");
+  }
+
+  window.togglePresetColor = function(colorName) {
+    const input = document.getElementById("pColors");
+    const list = input.value
+      .split(/[,،]/)
+      .map(c => c.trim())
+      .filter(Boolean);
+
+    const idx = list.indexOf(colorName);
+    if (idx > -1) {
+      list.splice(idx, 1);
+    } else {
+      list.push(colorName);
+    }
+    input.value = list.join("، ");
+    syncPresetButtons();
+  };
+
+  window.syncPresetButtons = function() {
+    const input = document.getElementById("pColors");
+    const list = input.value
+      .split(/[,،]/)
+      .map(c => c.trim())
+      .filter(Boolean);
+
+    document.querySelectorAll("#presetColorsBox .preset-btn").forEach(btn => {
+      const cName = btn.getAttribute("data-color");
+      btn.classList.toggle("active", list.includes(cName));
+    });
+  };
+
+  renderColorPresets();
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  let allProducts = [];
+  let currentFilter = 'الكل';
+  const selections = {};
+
+  const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
+  onSnapshot(q, (snapshot) => {
+    allProducts = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderCatalog();
+  });
+
+  function buildWhatsAppUrl(item) {
+    const sel = selections[item.id] || {};
+    const sizeText = sel.size ? ` - المقاس: ${sel.size}` : '';
+    const colorText = sel.color ? ` - اللون: ${sel.color}` : '';
+    const msg = encodeURIComponent(`مرحباً، أود الاستفسار عن: ${item.name} (السعر: ${item.price})${sizeText}${colorText}`);
+    return `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
+  }
+
+  window.selectOption = function(productId, type, value, el) {
+    if (!selections[productId]) selections[productId] = {};
+    selections[productId][type] = value;
+
+    const parent = el.parentElement;
+    parent.querySelectorAll('.size-tag, .color-chip').forEach(node => node.classList.remove('selected'));
+    el.classList.add('selected');
+
+    const item = allProducts.find(p => p.id === productId);
+    const linkEl = document.getElementById(`order-link-${productId}`);
+    if (item && linkEl) {
+      linkEl.href = buildWhatsAppUrl(item);
+    }
+  };
+
+  window.renderCatalog = function() {
+    const grid = document.getElementById('catalogGrid');
+    grid.innerHTML = '';
+    const filtered = currentFilter === 'الكل'
+      ? allProducts
+      : allProducts.filter(p => p.category === currentFilter);
+
+    filtered.forEach(item => {
+      const sizes = Array.isArray(item.sizes) ? item.sizes : [];
+      const colors = Array.isArray(item.colors) ? item.colors : [];
+      const currentSel = selections[item.id] || {};
+
+      const sizesHtml = sizes.map(s => {
+        const cleanSize = s.trim();
+        const activeClass = currentSel.size === cleanSize ? 'selected' : '';
+        return `<span class="size-tag ${activeClass}" onclick="selectOption('${item.id}', 'size', '${cleanSize.replace(/'/g, "\\'")}', this)">${cleanSize}</span>`;
+      }).join('');
+
+      const colorsHtml = colors.map(c => {
+        const cleanColor = c.trim();
+        const activeClass = currentSel.color === cleanColor ? 'selected' : '';
+        const hex = getColorHex(cleanColor);
+        return `
+          <span class="color-chip ${activeClass}" onclick="selectOption('${item.id}', 'color', '${cleanColor.replace(/'/g, "\\'")}', this)">
+            <span class="color-dot" style="background:${hex}"></span>
+            <span>${cleanColor}</span>
+          </span>
+        `;
+      }).join('');
+
+      const adminControls = window.isAdminLoggedIn
+        ? `<div class="admin-actions">
+             <button class="btn-edit" onclick="openEditModal('${item.id}')">تعديل</button>
+             <button class="btn-del" onclick="deleteProduct('${item.id}')">حذف</button>
+           </div>`
+        : '';
+
+      const imgSrc = normalizeImageUrl(item.img) || 'https://via.placeholder.com/400x500?text=No+Image';
+
+      grid.innerHTML += `
+        <div class="card">
+          <img src="${imgSrc}" alt="${item.name}" />
+          <div class="card-body">
+            <div>
+              <h3 style="margin:0">${item.name}</h3>
+              <div class="price">${item.price}</div>
+              <div>المقاسات: <div class="tags">${sizesHtml}</div></div>
+              <div>الألوان: <div class="tags">${colorsHtml}</div></div>
+            </div>
+            <div>
+              <a id="order-link-${item.id}" class="btn-order" href="${buildWhatsAppUrl(item)}" target="_blank">اطلب عبر واتساب</a>
+              ${adminControls}
+            </div>
+          </div>
+        </div>
+      `;
+    });
+  };
+
+  window.filterItems = function(cat, btn) {
+    currentFilter = cat;
+    document.querySelectorAll('.filters button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderCatalog();
+  };
+
+  onAuthStateChanged(auth, (user) => {
+    window.isAdminLoggedIn = Boolean(user);
+    document.getElementById('adminBar').style.display = window.isAdminLoggedIn ? 'flex' : 'none';
+    renderCatalog();
+  });
+
+  document.getElementById('loginBtn').addEventListener('click', async () => {
+    const email = document.getElementById('adminEmailInput').value.trim();
+    const pass = document.getElementById('adminPassInput').value;
+    try {
+      await signInWithEmailAndPassword(auth, email, pass);
+      document.getElementById('loginModal').style.display = 'none';
+    } catch (err) {
+      alert("خطأ في الدخول: " + (err.code || err.message));
+    }
+  });
+
+  window.openAddModal = function() {
+    document.getElementById('modalTitle').innerText = "إضافة موديل جديد";
+    document.getElementById('editProductId').value = "";
+    document.getElementById('pName').value = "";
+    document.getElementById('pPrice').value = "";
+    document.getElementById('pCat').value = "عبايات";
+    document.getElementById('pSizes').value = "";
+    document.getElementById('pColors').value = "";
+    document.getElementById('pImg').value = "";
+    syncPresetButtons();
+    document.getElementById('adminModal').style.display = 'flex';
+  };
+
+  window.openEditModal = function(id) {
+    const item = allProducts.find(p => p.id === id);
+    if (!item) return;
+    document.getElementById('modalTitle').innerText = "تعديل الموديل";
+    document.getElementById('editProductId').value = item.id;
+    document.getElementById('pName').value = item.name || "";
+    document.getElementById('pPrice').value = item.price || "";
+    document.getElementById('pCat').value = item.category || "عبايات";
+    document.getElementById('pSizes').value = Array.isArray(item.sizes) ? item.sizes.join('، ') : "";
+    document.getElementById('pColors').value = Array.isArray(item.colors) ? item.colors.join('، ') : "";
+    document.getElementById('pImg').value = item.img || "";
+    syncPresetButtons();
+    document.getElementById('adminModal').style.display = 'flex';
+  };
+
+  document.getElementById('saveProductBtn').addEventListener('click', async () => {
+    const editId = document.getElementById('editProductId').value;
+    const name = document.getElementById('pName').value.trim();
+    const price = document.getElementById('pPrice').value.trim();
+    const category = document.getElementById('pCat').value;
+    const sizes = document.getElementById('pSizes').value.split(/[,،]/).map(s => s.trim()).filter(Boolean);
+    const colors = document.getElementById('pColors').value.split(/[,،]/).map(c => c.trim()).filter(Boolean);
+    const img = normalizeImageUrl(document.getElementById('pImg').value.trim());
+
+    if (!name || !price) {
+      alert("يرجى إدخال اسم الموديل والسعر");
+      return;
+    }
+
+    const payload = { name, price, category, sizes, colors, img };
+
+    if (editId) {
+      await updateDoc(doc(db, "products", editId), payload);
+    } else {
+      await addDoc(collection(db, "products"), {
+        ...payload,
+        createdAt: Date.now()
+      });
+    }
+
+    window.closeModals();
+  });
+
+  window.deleteProduct = async function(id) {
+    if (confirm("هل أنتِ متأكدة من حذف هذا الموديل نهائياً؟")) {
+      await deleteDoc(doc(db, "products", id));
+    }
+  };
+
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    await signOut(auth);
+    window.closeModals();
+  });
+</script>
+</body>
+</html>
