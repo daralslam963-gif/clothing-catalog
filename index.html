@@ -3,35 +3,65 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>كتالوج الألبسة</title>
+  <title>شركة فنون للمحجبات - الكتالوج</title>
   <style>
-    :root { --primary: #2c3e50; --accent: #8e6e53; --bg: #faf9f6; }
+    :root { --primary: #1b4d3e; --accent: #c59b27; --bg: #faf9f6; }
     body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); margin: 0; padding: 0; color: #333; }
-    header { background: #fff; padding: 16px 24px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 10; }
-    header h1 { margin: 0; font-size: 1.4rem; color: var(--primary); cursor: pointer; user-select: none; }
+    header { background: #fff; padding: 16px 24px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06); position: sticky; top: 0; z-index: 10; }
+    header h1 { margin: 0; font-size: 1.45rem; color: var(--primary); cursor: pointer; user-select: none; }
+
+    /* شريط الإدارة العلوي (مخفي عن الزوار) */
+    .admin-bar { display: none; background: #1e293b; color: #fff; padding: 10px 20px; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .admin-bar button { border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.9rem; }
+    .btn-add-new { background: #10b981; color: #fff; }
+    .btn-logout-bar { background: #ef4444; color: #fff; }
+
     .filters { display: flex; justify-content: center; gap: 10px; padding: 16px; flex-wrap: wrap; }
-    .filters button { border: 1px solid #ddd; background: #fff; padding: 8px 16px; border-radius: 20px; cursor: pointer; }
+    .filters button { border: 1px solid #ddd; background: #fff; padding: 8px 18px; border-radius: 20px; cursor: pointer; font-weight: 500; }
     .filters button.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; padding: 20px; max-width: 1200px; margin: auto; }
     .card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.06); display: flex; flex-direction: column; }
-    .card img { width: 100%; height: 300px; object-fit: cover; background: #eee; }
+    .card img { width: 100%; height: 320px; object-fit: cover; background: #eee; }
     .card-body { padding: 16px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
-    .price { font-weight: bold; color: var(--accent); font-size: 1.1rem; margin: 8px 0; }
-    .tags { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }
-    .size-tag { border: 1px solid #ccc; padding: 2px 8px; border-radius: 4px; font-size: 0.85rem; }
-    .color-dot { width: 20px; height: 20px; border-radius: 50%; border: 1px solid #999; display: inline-block; }
+    .price { font-weight: bold; color: var(--accent); font-size: 1.15rem; margin: 8px 0; }
+    .tags { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; align-items: center; }
+    .size-tag { border: 1px solid #ccc; padding: 3px 10px; border-radius: 5px; font-size: 0.85rem; cursor: pointer; background: #fff; }
+    .size-tag.selected { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+    /* عرض الألوان بالاسم مع دائرة لونية */
+    .color-chip { display: inline-flex; align-items: center; gap: 6px; border: 1px solid #d1d5db; background: #fff; padding: 3px 9px; border-radius: 999px; font-size: 0.82rem; cursor: pointer; }
+    .color-chip.selected { border-color: var(--primary); background: #ecfdf5; font-weight: bold; box-shadow: 0 0 0 1px var(--primary); }
+    .color-dot { width: 14px; height: 14px; border-radius: 50%; border: 1px solid #9ca3af; display: inline-block; flex-shrink: 0; }
+
     .btn-order { display: block; text-align: center; background: #25D366; color: #fff; text-decoration: none; padding: 10px; border-radius: 8px; font-weight: bold; margin-top: 12px; }
-    /* لوحة المدير المخفية */
-    .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 100; padding: 16px; }
-    .modal-content { background: #fff; padding: 24px; border-radius: 12px; width: 100%; max-width: 420px; max-height: 90vh; overflow-y: auto; }
-    .modal-content input, .modal-content select { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+
+    /* أزرار التعديل والحذف للمدير */
+    .admin-actions { display: flex; gap: 8px; margin-top: 10px; }
+    .btn-edit { flex: 1; padding: 8px; background: #2563eb; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+    .btn-del { flex: 1; padding: 8px; background: #dc2626; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+
+    /* النوافذ المنبثقة */
+    .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); justify-content: center; align-items: center; z-index: 100; padding: 16px; }
+    .modal-content { background: #fff; padding: 24px; border-radius: 12px; width: 100%; max-width: 450px; max-height: 90vh; overflow-y: auto; }
+    .modal-content label { display: block; font-size: 0.85rem; font-weight: bold; margin-top: 8px; color: #444; }
+    .modal-content input, .modal-content select { width: 100%; padding: 10px; margin: 4px 0 8px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+    .preset-colors { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px; }
+    .preset-btn { display: inline-flex; align-items: center; gap: 5px; border: 1px solid #d1d5db; background: #f9fafb; padding: 4px 8px; border-radius: 6px; font-size: 0.78rem; cursor: pointer; }
+    .preset-btn.active { border-color: var(--primary); background: #d1fae5; font-weight: bold; }
     .btn-admin { width: 100%; padding: 12px; background: var(--primary); color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 8px; }
   </style>
 </head>
 <body>
 
+<div class="admin-bar" id="adminBar">
+  <span>وضع الإدارة مفعّل</span>
+  <button class="btn-add-new" onclick="openAddModal()">+ إضافة موديل جديد</button>
+  <button class="btn-logout-bar" id="logoutBtn">تسجيل خروج</button>
+</div>
+
 <header>
-  <h1 id="storeTitle" title="المتجر">تشكيلة الألبسة الجديدة</h1>
+  <h1 id="storeTitle" title="شركة فنون للمحجبات">شركة فنون للمحجبات</h1>
 </header>
 
 <div class="filters" id="categoryFilters">
@@ -43,63 +73,235 @@
 
 <div class="grid" id="catalogGrid"></div>
 
-<!-- نافذة كلمة السر السرية للمدير -->
+<!-- نافذة تسجيل دخول المدير -->
 <div class="modal" id="loginModal">
   <div class="modal-content">
-    <h3>دخول الإدارة</h3>
-    <input type="password" id="adminPassInput" placeholder="أدخل كلمة سر المدير" />
-    <button class="btn-admin" onclick="verifyAdmin()">دخول</button>
+    <h3 style="margin-top:0">دخول الإدارة</h3>
+    <input type="email" id="adminEmailInput" placeholder="بريد المدير الإلكتروني" />
+    <input type="password" id="adminPassInput" placeholder="كلمة سر المدير" />
+    <button class="btn-admin" id="loginBtn">دخول</button>
     <button class="btn-admin" style="background:#888;" onclick="closeModals()">إغلاق</button>
   </div>
 </div>
 
-<!-- لوحة إضافة صنف جديد -->
+<!-- نافذة إضافة / تعديل موديل -->
 <div class="modal" id="adminModal">
   <div class="modal-content">
-    <h3>إضافة موديل جديد</h3>
-    <input type="text" id="pName" placeholder="اسم الموديل (مثال: طقم كتان صيفي)" />
-    <input type="text" id="pPrice" placeholder="السعر (مثال: 25$ أو 350,000 ل.س)" />
+    <h3 id="modalTitle" style="margin-top:0">إضافة موديل جديد</h3>
+    <input type="hidden" id="editProductId" />
+
+    <label>اسم الموديل</label>
+    <input type="text" id="pName" placeholder="مثال: عباية ريم" />
+
+    <label>السعر</label>
+    <input type="text" id="pPrice" placeholder="مثال: 40$" />
+
+    <label>القسم</label>
     <select id="pCat">
       <option value="عبايات">عبايات</option>
       <option value="فساتين">فساتين</option>
       <option value="أطقم">أطقم</option>
     </select>
-    <input type="text" id="pSizes" placeholder="المقاسات مفصولة بفاصلة (S, M, L, XL)" />
-    <input type="text" id="pColors" placeholder="أكواد الألوان (#000000, #8e6e53, #ffffff)" />
-    <input type="url" id="pImg" placeholder="رابط صورة الموديل" />
-    <button class="btn-admin" onclick="addProduct()">حفظ ونشر الموديل</button>
-    <button class="btn-admin" style="background:#c0392b;" onclick="closeModals()">خروج</button>
+
+    <label>المقاسات (مفصولة بفاصلة)</label>
+    <input type="text" id="pSizes" placeholder="مثال: ستاندر أو S, M, L, XL" />
+
+    <label>الألوان (اضغطي على الألوان لتحديدها أو اكتبي الأسماء مفصولة بفاصلة)</label>
+    <div class="preset-colors" id="presetColorsBox"></div>
+    <input type="text" id="pColors" placeholder="مثال: أسود، بيج، أزرق شامي" oninput="syncPresetButtons()" />
+
+    <label>رابط صورة الموديل المباشر (من Postimages)</label>
+    <input type="url" id="pImg" placeholder="https://i.postimg.cc/..." />
+
+    <button class="btn-admin" id="saveProductBtn">حفظ ونشر الموديل</button>
+    <button class="btn-admin" style="background:#6b7280;" onclick="closeModals()">إلغاء</button>
   </div>
 </div>
 
-<script>
-  // ملاحظة: عند الربط الفعلي مع Firebase، تُستبدل هذه المصفوفة ببيانات Firestore
-  let products = JSON.parse(localStorage.getItem('store_products')) || [
-    {
-      name: "عباية كريب ملكي",
-      price: "30$",
-      category: "عبايات",
-      sizes: ["M", "L", "XL"],
-      colors: ["#1a1a1a", "#5c4033"],
-      img: "https://via.placeholder.com/400x500?text=Abaya+Model"
-    }
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyC7FfNLHV2UFgTvurRLB8rS3guVj0IbtdM",
+    authDomain: "catalog-be02b.firebaseapp.com",
+    projectId: "catalog-be02b",
+    storageBucket: "catalog-be02b.firebasestorage.app",
+    messagingSenderId: "736617678510",
+    appId: "1:736617678510:web:46c6d36bb6e54ba8d2cf3f"
+  };
+
+  // رقم الواتساب بدون علامة +
+  const WHATSAPP_NUMBER = "963985145291";
+
+  // قائمة الألوان المعتمدة وأكوادها البصرية
+  const COLOR_MAP = {
+    "أسود": "#111111",
+    "اسود": "#111111",
+    "بيج": "#e5d3b3",
+    "أبيض": "#ffffff",
+    "ابيض": "#ffffff",
+    "سكري": "#f5f0e1",
+    "أخضر": "#1f7a4c",
+    "اخضر": "#1f7a4c",
+    "أحمر": "#dc2626",
+    "احمر": "#dc2626",
+    "قرميدي": "#b4532a",
+    "زهري": "#f472b6",
+    "أزرق شامي": "#1d4ed8",
+    "ازرق شامي": "#1d4ed8",
+    "أزرق فاتح": "#7dd3fc",
+    "ازرق فاتح": "#7dd3fc",
+    "بني": "#6b4423",
+    "أصفر": "#facc15",
+    "اصفر": "#facc15",
+    "فضي": "#cbd5e1"
+  };
+
+  const AVAILABLE_COLORS = [
+    "أسود", "بيج", "أبيض", "سكري", "أخضر", "أحمر",
+    "قرميدي", "زهري", "أزرق شامي", "أزرق فاتح", "بني", "أصفر", "فضي"
   ];
 
-  const WHATSAPP_NUMBER = "963900000000"; // ضعي رقم الواتساب هنا بدون +
+  function getColorHex(colorName) {
+    const clean = (colorName || "").trim();
+    if (COLOR_MAP[clean]) return COLOR_MAP[clean];
+    if (/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(clean)) return clean;
+    return "#e5e7eb";
+  }
 
-  function renderCatalog(filter = 'الكل') {
+  function normalizeImageUrl(url) {
+    const clean = (url || "").trim();
+    const driveMatch = clean.match(/drive\.google\.com\/file\/d\/([^/]+)/);
+    if (driveMatch && driveMatch[1]) {
+      return `https://lh3.googleusercontent.com/d/${driveMatch[1]}`;
+    }
+    return clean;
+  }
+
+  function renderColorPresets() {
+    const box = document.getElementById("presetColorsBox");
+    box.innerHTML = AVAILABLE_COLORS.map(name => `
+      <button type="button" class="preset-btn" data-color="${name}" onclick="togglePresetColor('${name}')">
+        <span class="color-dot" style="background:${getColorHex(name)}"></span>
+        <span>${name}</span>
+      </button>
+    `).join("");
+  }
+
+  window.togglePresetColor = function(colorName) {
+    const input = document.getElementById("pColors");
+    const list = input.value
+      .split(/[,،]/)
+      .map(c => c.trim())
+      .filter(Boolean);
+
+    const idx = list.indexOf(colorName);
+    if (idx > -1) {
+      list.splice(idx, 1);
+    } else {
+      list.push(colorName);
+    }
+    input.value = list.join("، ");
+    syncPresetButtons();
+  };
+
+  window.syncPresetButtons = function() {
+    const input = document.getElementById("pColors");
+    const list = input.value
+      .split(/[,،]/)
+      .map(c => c.trim())
+      .filter(Boolean);
+
+    document.querySelectorAll("#presetColorsBox .preset-btn").forEach(btn => {
+      const cName = btn.getAttribute("data-color");
+      btn.classList.toggle("active", list.includes(cName));
+    });
+  };
+
+  renderColorPresets();
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  let allProducts = [];
+  let currentFilter = 'الكل';
+  let isAdminLoggedIn = false;
+  const selections = {};
+
+  const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
+  onSnapshot(q, (snapshot) => {
+    allProducts = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderCatalog();
+  });
+
+  function buildWhatsAppUrl(item) {
+    const sel = selections[item.id] || {};
+    const sizeText = sel.size ? ` - المقاس: ${sel.size}` : '';
+    const colorText = sel.color ? ` - اللون: ${sel.color}` : '';
+    const msg = encodeURIComponent(`مرحباً، أود الاستفسار عن: ${item.name} (السعر: ${item.price})${sizeText}${colorText}`);
+    return `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
+  }
+
+  window.selectOption = function(productId, type, value, el) {
+    if (!selections[productId]) selections[productId] = {};
+    selections[productId][type] = value;
+
+    const parent = el.parentElement;
+    parent.querySelectorAll('.size-tag, .color-chip').forEach(node => node.classList.remove('selected'));
+    el.classList.add('selected');
+
+    const item = allProducts.find(p => p.id === productId);
+    const linkEl = document.getElementById(`order-link-${productId}`);
+    if (item && linkEl) {
+      linkEl.href = buildWhatsAppUrl(item);
+    }
+  };
+
+  window.renderCatalog = function() {
     const grid = document.getElementById('catalogGrid');
     grid.innerHTML = '';
-    const filtered = filter === 'الكل' ? products : products.filter(p => p.category === filter);
+    const filtered = currentFilter === 'الكل'
+      ? allProducts
+      : allProducts.filter(p => p.category === currentFilter);
 
     filtered.forEach(item => {
-      const sizesHtml = item.sizes.map(s => `<span class="size-tag">${s.trim()}</span>`).join('');
-      const colorsHtml = item.colors.map(c => `<span class="color-dot" style="background:${c.trim()}"></span>`).join('');
-      const msg = encodeURIComponent(`مرحباً، أود الاستفسار عن: ${item.name} (السعر: ${item.price})`);
+      const sizes = Array.isArray(item.sizes) ? item.sizes : [];
+      const colors = Array.isArray(item.colors) ? item.colors : [];
+      const currentSel = selections[item.id] || {};
+
+      const sizesHtml = sizes.map(s => {
+        const cleanSize = s.trim();
+        const activeClass = currentSel.size === cleanSize ? 'selected' : '';
+        return `<span class="size-tag ${activeClass}" onclick="selectOption('${item.id}', 'size', '${cleanSize.replace(/'/g, "\\'")}', this)">${cleanSize}</span>`;
+      }).join('');
+
+      const colorsHtml = colors.map(c => {
+        const cleanColor = c.trim();
+        const activeClass = currentSel.color === cleanColor ? 'selected' : '';
+        const hex = getColorHex(cleanColor);
+        return `
+          <span class="color-chip ${activeClass}" onclick="selectOption('${item.id}', 'color', '${cleanColor.replace(/'/g, "\\'")}', this)">
+            <span class="color-dot" style="background:${hex}"></span>
+            <span>${cleanColor}</span>
+          </span>
+        `;
+      }).join('');
+
+      const adminControls = isAdminLoggedIn
+        ? `<div class="admin-actions">
+             <button class="btn-edit" onclick="openEditModal('${item.id}')">تعديل</button>
+             <button class="btn-del" onclick="deleteProduct('${item.id}')">حذف</button>
+           </div>`
+        : '';
+
+      const imgSrc = normalizeImageUrl(item.img) || 'https://via.placeholder.com/400x500?text=No+Image';
 
       grid.innerHTML += `
         <div class="card">
-          <img src="${item.img}" alt="${item.name}" />
+          <img src="${imgSrc}" alt="${item.name}" />
           <div class="card-body">
             <div>
               <h3 style="margin:0">${item.name}</h3>
@@ -107,66 +309,130 @@
               <div>المقاسات: <div class="tags">${sizesHtml}</div></div>
               <div>الألوان: <div class="tags">${colorsHtml}</div></div>
             </div>
-            <a class="btn-order" href="https://wa.me/${WHATSAPP_NUMBER}?text=${msg}" target="_blank">اطلب عبر واتساب</a>
+            <div>
+              <a id="order-link-${item.id}" class="btn-order" href="${buildWhatsAppUrl(item)}" target="_blank">اطلب عبر واتساب</a>
+              ${adminControls}
+            </div>
           </div>
         </div>
       `;
     });
-  }
+  };
 
-  function filterItems(cat, btn) {
+  window.filterItems = function(cat, btn) {
+    currentFilter = cat;
     document.querySelectorAll('.filters button').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    renderCatalog(cat);
-  }
+    renderCatalog();
+  };
 
-  // فتح نافذة المدير السرية عند الضغط 5 مرات على العنوان أو كتابة #admin في الرابط
+  // فتح نافذة الدخول السرية بالضغط 5 مرات على العنوان
   let clicks = 0;
   document.getElementById('storeTitle').addEventListener('click', () => {
     clicks++;
     if (clicks === 5) {
-      document.getElementById('loginModal').style.display = 'flex';
+      if (isAdminLoggedIn) {
+        openAddModal();
+      } else {
+        document.getElementById('loginModal').style.display = 'flex';
+      }
       clicks = 0;
     }
     setTimeout(() => clicks = 0, 2000);
   });
 
-  if (window.location.hash === '#admin') {
+  if (window.location.hash === '#admin' && !isAdminLoggedIn) {
     document.getElementById('loginModal').style.display = 'flex';
   }
 
-  function verifyAdmin() {
-    // عند الربط بـ Firebase نستبدل هذا التحقق بدالة signInWithEmailAndPassword
-    const pass = document.getElementById('adminPassInput').value;
-    if (pass === "admin2026") {
-      document.getElementById('loginModal').style.display = 'none';
-      document.getElementById('adminModal').style.display = 'flex';
-    } else {
-      alert("كلمة السر غير صحيحة");
-    }
-  }
-
-  function addProduct() {
-    const newItem = {
-      name: document.getElementById('pName').value,
-      price: document.getElementById('pPrice').value,
-      category: document.getElementById('pCat').value,
-      sizes: document.getElementById('pSizes').value.split(','),
-      colors: document.getElementById('pColors').value.split(','),
-      img: document.getElementById('pImg').value || "https://via.placeholder.com/400x500"
-    };
-    products.unshift(newItem);
-    localStorage.setItem('store_products', JSON.stringify(products));
+  onAuthStateChanged(auth, (user) => {
+    isAdminLoggedIn = Boolean(user);
+    document.getElementById('adminBar').style.display = isAdminLoggedIn ? 'flex' : 'none';
     renderCatalog();
-    closeModals();
-  }
+  });
 
-  function closeModals() {
+  document.getElementById('loginBtn').addEventListener('click', async () => {
+    const email = document.getElementById('adminEmailInput').value.trim();
+    const pass = document.getElementById('adminPassInput').value;
+    try {
+      await signInWithEmailAndPassword(auth, email, pass);
+      document.getElementById('loginModal').style.display = 'none';
+    } catch (err) {
+      alert("بيانات الدخول غير صحيحة");
+    }
+  });
+
+  window.openAddModal = function() {
+    document.getElementById('modalTitle').innerText = "إضافة موديل جديد";
+    document.getElementById('editProductId').value = "";
+    document.getElementById('pName').value = "";
+    document.getElementById('pPrice').value = "";
+    document.getElementById('pCat').value = "عبايات";
+    document.getElementById('pSizes').value = "";
+    document.getElementById('pColors').value = "";
+    document.getElementById('pImg').value = "";
+    syncPresetButtons();
+    document.getElementById('adminModal').style.display = 'flex';
+  };
+
+  window.openEditModal = function(id) {
+    const item = allProducts.find(p => p.id === id);
+    if (!item) return;
+    document.getElementById('modalTitle').innerText = "تعديل الموديل";
+    document.getElementById('editProductId').value = item.id;
+    document.getElementById('pName').value = item.name || "";
+    document.getElementById('pPrice').value = item.price || "";
+    document.getElementById('pCat').value = item.category || "عبايات";
+    document.getElementById('pSizes').value = Array.isArray(item.sizes) ? item.sizes.join('، ') : "";
+    document.getElementById('pColors').value = Array.isArray(item.colors) ? item.colors.join('، ') : "";
+    document.getElementById('pImg').value = item.img || "";
+    syncPresetButtons();
+    document.getElementById('adminModal').style.display = 'flex';
+  };
+
+  document.getElementById('saveProductBtn').addEventListener('click', async () => {
+    const editId = document.getElementById('editProductId').value;
+    const name = document.getElementById('pName').value.trim();
+    const price = document.getElementById('pPrice').value.trim();
+    const category = document.getElementById('pCat').value;
+    const sizes = document.getElementById('pSizes').value.split(/[,،]/).map(s => s.trim()).filter(Boolean);
+    const colors = document.getElementById('pColors').value.split(/[,،]/).map(c => c.trim()).filter(Boolean);
+    const img = normalizeImageUrl(document.getElementById('pImg').value.trim());
+
+    if (!name || !price) {
+      alert("يرجى إدخال اسم الموديل والسعر");
+      return;
+    }
+
+    const payload = { name, price, category, sizes, colors, img };
+
+    if (editId) {
+      await updateDoc(doc(db, "products", editId), payload);
+    } else {
+      await addDoc(collection(db, "products"), {
+        ...payload,
+        createdAt: Date.now()
+      });
+    }
+
+    closeModals();
+  });
+
+  window.deleteProduct = async function(id) {
+    if (confirm("هل أنتِ متأكدة من حذف هذا الموديل نهائياً؟")) {
+      await deleteDoc(doc(db, "products", id));
+    }
+  };
+
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    await signOut(auth);
+    closeModals();
+  });
+
+  window.closeModals = function() {
     document.getElementById('loginModal').style.display = 'none';
     document.getElementById('adminModal').style.display = 'none';
-  }
-
-  renderCatalog();
+  };
 </script>
 </body>
 </html>
