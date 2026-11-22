@@ -72,11 +72,244 @@
       z-index: 15;
     }
 
+    /* زر الثلاث شخطات على طرف اليسار */
+    .menu-toggle-btn {
+      position: absolute;
+      left: 16px;
+      top: 14px;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      border: 1px solid rgba(197, 155, 39, 0.45);
+      background: #fffdf7;
+      color: var(--primary);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(27, 77, 62, 0.08);
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+      z-index: 20;
+    }
+
+    .menu-toggle-btn:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+      transform: scale(1.04);
+    }
+
+    .menu-toggle-btn span {
+      display: block;
+      width: 20px;
+      height: 2.5px;
+      background: var(--primary);
+      border-radius: 99px;
+      transition: background 0.2s ease;
+    }
+
+    .menu-toggle-btn:hover span {
+      background: #fff;
+    }
+
+    /* القائمة الجانبية وخلفيتها */
+    .side-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.5);
+      backdrop-filter: blur(3px);
+      z-index: 110;
+    }
+
+    .side-backdrop.open {
+      display: block;
+    }
+
+    .side-drawer {
+      position: fixed;
+      top: 0;
+      left: -340px;
+      width: 315px;
+      max-width: 86vw;
+      height: 100vh;
+      background: #ffffff;
+      box-shadow: 10px 0 35px rgba(15, 23, 42, 0.18);
+      border-right: 2px solid rgba(197, 155, 39, 0.35);
+      z-index: 120;
+      padding: 20px 18px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+      overflow-y: auto;
+      transition: left 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .side-drawer.open {
+      left: 0;
+    }
+
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #ece7dc;
+      margin-bottom: 14px;
+    }
+
+    .drawer-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .drawer-brand img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+    }
+
+    .drawer-brand-title {
+      font-weight: 700;
+      font-size: 0.98rem;
+      color: var(--primary);
+    }
+
+    .drawer-close {
+      background: #f3f4f6;
+      border: none;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      font-size: 1.1rem;
+      cursor: pointer;
+      color: #4b5563;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .drawer-close:hover {
+      background: #e5e7eb;
+      color: #111;
+    }
+
+    .drawer-nav-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(27, 77, 62, 0.18);
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: #fff;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+      box-shadow: 0 5px 14px rgba(27, 77, 62, 0.18);
+      transition: transform 0.2s ease;
+      margin-bottom: 14px;
+    }
+
+    .drawer-nav-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .about-card {
+      background: linear-gradient(180deg, #fcfbf7 0%, #f6f2e8 100%);
+      border: 1px solid rgba(197, 155, 39, 0.35);
+      border-right: 4px solid var(--accent);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+
+    .about-card-title {
+      margin: 0 0 8px;
+      font-size: 0.96rem;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .about-card p {
+      margin: 0;
+      font-size: 0.85rem;
+      line-height: 1.8;
+      color: #374151;
+      text-align: justify;
+    }
+
+    .social-card {
+      background: #faf9f6;
+      border: 1px solid #e6e0d2;
+      border-radius: 14px;
+      padding: 13px;
+    }
+
+    .social-links-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .social-link-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 12px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.86rem;
+      color: var(--primary);
+      background: #ffffff;
+      border: 1px solid #dfd9cb;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .social-link-item:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+      background: #fffdf7;
+    }
+
+    .developer-box {
+      padding-top: 12px;
+      border-top: 1px solid #e8e3d7;
+      text-align: center;
+    }
+
+    .developer-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .developer-name {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--primary);
+      line-height: 1.6;
+    }
+
     .brand-row {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 12px;
+      padding-left: 44px;
     }
 
     .brand-logo {
@@ -109,6 +342,7 @@
       color: var(--accent);
       font-weight: 600;
       margin-top: 2px;
+      padding-left: 44px;
     }
 
     /* شريط البحث والمحافظات في الأعلى */
@@ -624,6 +858,51 @@
       font-size: 0.9rem;
     }
 
+    /* حقل كلمة السر مع زر العين */
+    .password-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      margin: 4px 0 6px;
+    }
+
+    .password-wrap input {
+      margin: 0;
+      padding-left: 44px;
+    }
+
+    .toggle-pass-btn {
+      position: absolute;
+      left: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 1.1rem;
+      padding: 4px 6px;
+      line-height: 1;
+      color: #4b5563;
+      border-radius: 6px;
+    }
+
+    .toggle-pass-btn:hover {
+      background: #f1f5f9;
+      color: var(--primary);
+    }
+
+    .login-error-msg {
+      display: none;
+      color: #dc2626;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 7px 10px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      margin: 4px 0 8px;
+    }
+
     .form-row-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -719,6 +998,51 @@
   <img class="watermark-hero" src="./WhatsApp%20Image%202026-11-10%20at%201.23.30%20AM.jpeg" alt="" />
 </div>
 
+<!-- القائمة الجانبية وخلفيتها -->
+<div class="side-backdrop" id="sideBackdrop" onclick="closeSideMenu()"></div>
+<aside class="side-drawer" id="sideDrawer" aria-label="القائمة الجانبية">
+  <div>
+    <div class="drawer-header">
+      <div class="drawer-brand">
+        <img src="./WhatsApp%20Image%202026-11-10%20at%201.23.30%20AM.jpeg" alt="شعار شركة فنون للمحجبات" />
+        <span class="drawer-brand-title">شركة فنون للمحجبات</span>
+      </div>
+      <button type="button" class="drawer-close" title="إغلاق القائمة" onclick="closeSideMenu()">✕</button>
+    </div>
+
+    <button type="button" class="drawer-nav-btn" onclick="goToHomeProducts()">
+      <span>🏠</span>
+      <span>الصفحة الرئيسية (المنتجات)</span>
+    </button>
+
+    <div class="about-card">
+      <h4 class="about-card-title">✨ حول الشركة</h4>
+      <p>
+        في شركة فنون للألبسة الشرعية، نؤمن أن الأناقة الحقيقية لا تتعارض مع الاحتشام، بل تكتمل به؛ ولأن الحشمة هي أصل الجمال، صممنا لكِ تشكيلة تجمع بين جودة الخامات، دقة التفصيل، وراحة التصميم، لنمنح المرأة المحجبة إطلالة راقية تعبّر عن هويتها وتواكب عصرها بأبهى حُلّة.
+      </p>
+    </div>
+
+    <div class="social-card">
+      <h4 class="about-card-title" style="margin-bottom:4px;">🌐 حساباتنا على مواقع التواصل</h4>
+      <div class="social-links-list">
+        <a id="fbSocialLink" class="social-link-item" href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+          <span>📘 صفحة فيسبوك (Facebook)</span>
+          <span>←</span>
+        </a>
+        <a id="igSocialLink" class="social-link-item" href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+          <span>📸 حساب إنستغرام (Instagram)</span>
+          <span>←</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="developer-box">
+    <div class="developer-label">المطور</div>
+    <div class="developer-name">تم التطوير والتصميم من قبل المهندسة فاطمة عبد القادر حاج مصطفى</div>
+  </div>
+</aside>
+
 <div class="admin-bar" id="adminBar">
   <span>وضع الإدارة مفعّل</span>
   <button class="btn-add-new" onclick="openAddModal()">+ إضافة موديل جديد</button>
@@ -726,6 +1050,13 @@
 </div>
 
 <header>
+  <!-- زر الثلاث شخطات على طرف اليسار -->
+  <button type="button" class="menu-toggle-btn" title="القائمة وحول الشركة" aria-label="فتح القائمة الجانبية" onclick="openSideMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
   <div class="brand-row">
     <img class="brand-logo" src="./WhatsApp%20Image%202026-11-10%20at%201.23.30%20AM.jpeg" alt="شعار شركة فنون للمحجبات" />
     <h1 id="storeTitle" title="شركة فنون للمحجبات">شركة فنون للمحجبات</h1>
@@ -746,7 +1077,7 @@
   </div>
 </header>
 
-<div class="controls-wrapper">
+<div class="controls-wrapper" id="productsTopSection">
   <div class="filters" id="categoryFilters"></div>
 
   <!-- أزرار المحافظات السريعة -->
@@ -760,7 +1091,14 @@
   <div class="modal-content">
     <h3 style="margin-top:0">دخول الإدارة</h3>
     <input type="email" id="adminEmailInput" placeholder="بريد المدير الإلكتروني" />
-    <input type="password" id="adminPassInput" placeholder="كلمة سر المدير" />
+
+    <div class="password-wrap">
+      <input type="password" id="adminPassInput" placeholder="كلمة سر المدير" />
+      <button type="button" class="toggle-pass-btn" id="togglePassBtn" title="إظهار أو إخفاء كلمة السر" onclick="togglePasswordVisibility()">👁️</button>
+    </div>
+
+    <div class="login-error-msg" id="loginErrorMsg">خطأ في كلمة السر أو بيانات الدخول، تم مسح كلمة السر يرجى المحاولة من جديد.</div>
+
     <button class="btn-admin" id="loginBtn">دخول</button>
     <button class="btn-admin" style="background:#888;" onclick="closeModals()">إغلاق</button>
   </div>
@@ -873,20 +1211,53 @@
   </div>
 </div>
 
-<!-- سكربت مستقل لفتح نافذة الإدارة فوراً دون انتظار الشبكة -->
+<!-- سكربت مستقل لفتح القائمة الجانبية ونافذة الإدارة فوراً دون انتظار الشبكة -->
 <script>
   window.isAdminLoggedIn = false;
+
+  window.openSideMenu = function() {
+    document.getElementById('sideBackdrop').classList.add('open');
+    document.getElementById('sideDrawer').classList.add('open');
+  };
+
+  window.closeSideMenu = function() {
+    document.getElementById('sideBackdrop').classList.remove('open');
+    document.getElementById('sideDrawer').classList.remove('open');
+  };
+
+  window.goToHomeProducts = function() {
+    window.closeSideMenu();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  window.togglePasswordVisibility = function() {
+    const passInput = document.getElementById('adminPassInput');
+    const toggleBtn = document.getElementById('togglePassBtn');
+    if (!passInput || !toggleBtn) return;
+
+    if (passInput.type === 'password') {
+      passInput.type = 'text';
+      toggleBtn.textContent = '🙈';
+    } else {
+      passInput.type = 'password';
+      toggleBtn.textContent = '👁️';
+    }
+  };
 
   window.closeModals = function() {
     document.getElementById('loginModal').style.display = 'none';
     document.getElementById('adminModal').style.display = 'none';
     document.getElementById('orderModal').style.display = 'none';
+    const errBox = document.getElementById('loginErrorMsg');
+    if (errBox) errBox.style.display = 'none';
   };
 
   window.triggerAdminModal = function() {
     if (window.isAdminLoggedIn && typeof window.openAddModal === 'function') {
       window.openAddModal();
     } else {
+      const errBox = document.getElementById('loginErrorMsg');
+      if (errBox) errBox.style.display = 'none';
       document.getElementById('loginModal').style.display = 'flex';
     }
   };
@@ -929,6 +1300,11 @@
   };
 
   const WHATSAPP_NUMBER = "963985145291";
+  const FACEBOOK_URL = "https://facebook.com";
+  const INSTAGRAM_URL = "https://instagram.com";
+
+  document.getElementById("fbSocialLink").href = FACEBOOK_URL;
+  document.getElementById("igSocialLink").href = INSTAGRAM_URL;
 
   const CATEGORIES = [
     "خمارات",
@@ -1293,12 +1669,23 @@
 
   document.getElementById('loginBtn').addEventListener('click', async () => {
     const email = document.getElementById('adminEmailInput').value.trim();
-    const pass = document.getElementById('adminPassInput').value;
+    const passInput = document.getElementById('adminPassInput');
+    const errBox = document.getElementById('loginErrorMsg');
+    const pass = passInput.value;
+
     try {
       await signInWithEmailAndPassword(auth, email, pass);
+      if (errBox) errBox.style.display = 'none';
+      passInput.value = '';
       document.getElementById('loginModal').style.display = 'none';
     } catch (err) {
-      alert("خطأ في الدخول: " + (err.code || err.message));
+      passInput.value = '';
+      passInput.focus();
+      if (errBox) {
+        errBox.textContent = "خطأ في كلمة السر أو بيانات الدخول، تم مسح كلمة السر يرجى كتابتها من جديد.";
+        errBox.style.display = 'block';
+      }
+      alert("خطأ: كلمة السر أو بيانات الدخول غير صحيحة، تم مسح كلمة السر لتكتبيها من جديد.");
     }
   });
 
