@@ -63,7 +63,7 @@
     header {
       background: rgba(255, 255, 255, 0.96);
       backdrop-filter: blur(8px);
-      padding: 12px 20px;
+      padding: 12px 20px 14px;
       text-align: center;
       box-shadow: 0 4px 18px rgba(27, 77, 62, 0.06);
       border-bottom: 1px solid rgba(197, 155, 39, 0.25);
@@ -345,26 +345,25 @@
       padding-left: 44px;
     }
 
-    /* شريط البحث والمحافظات في الأعلى */
+    /* شريط البحث والقائمة المنسدلة للمحافظات في سطر واحد مرتب */
     .top-search-bar {
-      max-width: 780px;
-      margin: 10px auto 0;
+      max-width: 820px;
+      margin: 12px auto 0;
       display: flex;
-      gap: 8px;
+      gap: 10px;
       align-items: center;
-      flex-wrap: wrap;
       justify-content: center;
     }
 
     .search-box {
       flex: 1;
-      min-width: 210px;
+      min-width: 180px;
       position: relative;
     }
 
     .search-box input {
       width: 100%;
-      padding: 8px 36px 8px 14px;
+      padding: 9px 38px 9px 16px;
       border-radius: 999px;
       border: 1px solid #d6d3cb;
       background: #faf9f6;
@@ -382,7 +381,7 @@
 
     .search-icon {
       position: absolute;
-      right: 12px;
+      right: 13px;
       top: 50%;
       transform: translateY(-50%);
       color: var(--muted);
@@ -390,10 +389,14 @@
       pointer-events: none;
     }
 
+    .gov-select-wrap {
+      flex-shrink: 0;
+    }
+
     .gov-select-wrap select {
-      padding: 8px 16px;
+      padding: 9px 18px;
       border-radius: 999px;
-      border: 1px solid var(--accent);
+      border: 1.5px solid var(--accent);
       background: #fffdf7;
       color: var(--primary);
       font-family: inherit;
@@ -401,6 +404,14 @@
       font-size: 0.88rem;
       cursor: pointer;
       outline: none;
+      box-shadow: 0 2px 8px rgba(197, 155, 39, 0.12);
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .gov-select-wrap select:hover,
+    .gov-select-wrap select:focus {
+      border-color: var(--primary);
+      background: #ffffff;
     }
 
     /* شريط الإدارة العلوي */
@@ -434,7 +445,7 @@
     .controls-wrapper {
       max-width: 1220px;
       margin: 0 auto;
-      padding: 14px 16px 6px;
+      padding: 16px 16px 8px;
     }
 
     .filters {
@@ -480,41 +491,6 @@
       color: #fff;
       border-color: #dc2626;
       box-shadow: 0 6px 14px rgba(220, 38, 38, 0.25);
-    }
-
-    /* شريط المحافظات السريع */
-    .gov-pills {
-      display: flex;
-      gap: 6px;
-      overflow-x: auto;
-      padding: 12px 4px 6px;
-      justify-content: flex-start;
-      scrollbar-width: thin;
-    }
-
-    @media (min-width: 1024px) {
-      .gov-pills { justify-content: center; flex-wrap: wrap; }
-    }
-
-    .gov-pill {
-      border: 1px solid #e5e0d5;
-      background: rgba(255,255,255,0.88);
-      color: var(--muted);
-      padding: 4px 12px;
-      border-radius: 999px;
-      font-family: inherit;
-      font-size: 0.8rem;
-      font-weight: 600;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.2s ease;
-    }
-
-    .gov-pill:hover { border-color: var(--accent); color: var(--primary); }
-    .gov-pill.active {
-      background: var(--accent);
-      color: #fff;
-      border-color: var(--accent);
     }
 
     .grid {
@@ -1063,7 +1039,7 @@
   </div>
   <div class="subtitle-tag">أناقة محتشمة • جودة وتفاصيل</div>
 
-  <!-- شريط البحث واختيار المحافظة في الأعلى -->
+  <!-- شريط البحث والقائمة المنسدلة للمحافظات في الأعلى -->
   <div class="top-search-bar">
     <div class="search-box">
       <span class="search-icon">🔍</span>
@@ -1079,9 +1055,6 @@
 
 <div class="controls-wrapper" id="productsTopSection">
   <div class="filters" id="categoryFilters"></div>
-
-  <!-- أزرار المحافظات السريعة -->
-  <div class="gov-pills" id="govPillsBar"></div>
 </div>
 
 <div class="grid" id="catalogGrid"></div>
@@ -1138,9 +1111,9 @@
     <label>تفاصيل القماش والخامة (تظهر تحت الصورة)</label>
     <textarea id="pDetails" rows="2" placeholder="مثال: قماش كريب ملكي فاخر، مبطن بالكامل، بدون وبّرة..."></textarea>
 
-    <label>المحافظات المتوفر فيها هذا الموديل</label>
+    <label>المحافظات والفروع المتوفر فيها هذا الموديل</label>
     <div style="margin:4px 0">
-      <button type="button" class="preset-btn" onclick="toggleAllGovs(true)">تحديد كل المحافظات</button>
+      <button type="button" class="preset-btn" onclick="toggleAllGovs(true)">تحديد الكل</button>
       <button type="button" class="preset-btn" onclick="toggleAllGovs(false)">إلغاء التحديد</button>
     </div>
     <div class="gov-checkbox-grid" id="adminGovCheckboxes"></div>
@@ -1201,7 +1174,7 @@
     <input type="tel" id="ordPhone" placeholder="مثال: 09xxxxxxxx" />
 
     <label>المحافظة والعنوان التفصيلي</label>
-    <input type="text" id="ordAddress" placeholder="المحافظة - المدينة / الحي - أقرب نقطة دالة" />
+    <input type="text" id="ordAddress" placeholder="المحافظة / الدولة - المدينة / الحي - أقرب نقطة دالة" />
 
     <label>ملاحظات تهم المصمم (حمل، إرضاع، تعديل طول أو قصة...)</label>
     <textarea id="ordNotes" rows="3" placeholder="اكتبي هنا إذا كان هناك حمل أو إرضاع أو أي تفاصيل خاصة بالمقاس..."></textarea>
@@ -1290,7 +1263,7 @@
   import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   const firebaseConfig = {
-    apiKey: "AIzaSyC7FfNlHV2UFgTvurRlBBrS3guVj0IbtdM",
+    apiKey: "AIzaSyC7FfNlHV2UFgTvurRLBBrS3guVj0IbtdM",
     authDomain: "catalog-be02b.firebaseapp.com",
     projectId: "catalog-be02b",
     storageBucket: "catalog-be02b.firebasestorage.app",
@@ -1318,7 +1291,8 @@
     "أغطية صلاة"
   ];
 
-  const SYRIA_GOVERNORATES = [
+  const REGIONS_AND_GOVERNORATES = [
+    "لبنان",
     "حلب", "إدلب", "دمشق", "ريف دمشق", "حمص", "حماة",
     "اللاذقية", "طرطوس", "درعا", "السويداء", "القنيطرة",
     "دير الزور", "الرقة", "الحسكة"
@@ -1375,23 +1349,19 @@
 
   function initGovernorateUI() {
     const dropdown = document.getElementById("govDropdown");
-    const pillsBar = document.getElementById("govPillsBar");
     const adminBox = document.getElementById("adminGovCheckboxes");
 
-    pillsBar.innerHTML = `<button class="gov-pill active" data-gov="الكل" onclick="filterGovernorate('الكل')">كل المحافظات</button>` +
-      SYRIA_GOVERNORATES.map(g => `<button class="gov-pill" data-gov="${g}" onclick="filterGovernorate('${g}')">${g}</button>`).join("");
-
-    SYRIA_GOVERNORATES.forEach(g => {
+    REGIONS_AND_GOVERNORATES.forEach(g => {
       const opt = document.createElement("option");
       opt.value = g;
-      opt.textContent = g;
+      opt.textContent = g === "لبنان" ? "🇱🇧 لبنان" : g;
       dropdown.appendChild(opt);
     });
 
-    adminBox.innerHTML = SYRIA_GOVERNORATES.map(g => `
+    adminBox.innerHTML = REGIONS_AND_GOVERNORATES.map(g => `
       <label class="gov-check-item">
         <input type="checkbox" name="adminGov" value="${g}" />
-        <span>${g}</span>
+        <span>${g === "لبنان" ? "لبنان (فروعنا)" : g}</span>
       </label>
     `).join("");
   }
@@ -1595,7 +1565,7 @@
         : '';
 
       const govsLineHtml = pGovs.length > 0
-        ? `<div class="gov-tag-line">📍 متوفر في: ${pGovs.length === SYRIA_GOVERNORATES.length ? 'جميع المحافظات' : pGovs.join('، ')}</div>`
+        ? `<div class="gov-tag-line">📍 متوفر في: ${pGovs.length === REGIONS_AND_GOVERNORATES.length ? 'جميع الفروع والمحافظات' : pGovs.join('، ')}</div>`
         : '';
 
       const adminControls = window.isAdminLoggedIn
@@ -1650,9 +1620,6 @@
   window.filterGovernorate = function(gov) {
     currentGov = gov;
     document.getElementById('govDropdown').value = gov;
-    document.querySelectorAll('.gov-pill').forEach(pill => {
-      pill.classList.toggle('active', pill.getAttribute('data-gov') === gov);
-    });
     renderCatalog();
   };
 
