@@ -12,6 +12,7 @@
       --primary: #1b4d3e;
       --primary-light: #266955;
       --accent: #c59b27;
+      --sale: #dc2626;
       --bg: #faf9f6;
       --card-bg: #ffffff;
       --text: #2d3130;
@@ -54,21 +55,21 @@
       box-shadow: 0 0 80px rgba(197, 155, 39, 0.08);
     }
 
-    header, .admin-bar, .filters, .grid, .modal {
+    header, .admin-bar, .controls-wrapper, .grid, .modal {
       position: relative;
       z-index: 1;
     }
 
     header {
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(255, 255, 255, 0.96);
       backdrop-filter: blur(8px);
-      padding: 14px 24px;
+      padding: 12px 20px;
       text-align: center;
       box-shadow: 0 4px 18px rgba(27, 77, 62, 0.06);
       border-bottom: 1px solid rgba(197, 155, 39, 0.25);
       position: sticky;
       top: 0;
-      z-index: 10;
+      z-index: 15;
     }
 
     .brand-row {
@@ -90,7 +91,7 @@
 
     header h1 {
       margin: 0;
-      font-size: 1.45rem;
+      font-size: 1.4rem;
       font-weight: 700;
       color: var(--primary);
       cursor: pointer;
@@ -104,13 +105,71 @@
     }
 
     .subtitle-tag {
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       color: var(--accent);
       font-weight: 600;
-      margin-top: 3px;
+      margin-top: 2px;
     }
 
-    /* شريط الإدارة العلوي (مخفي عن الزوار) */
+    /* شريط البحث والمحافظات في الأعلى */
+    .top-search-bar {
+      max-width: 780px;
+      margin: 10px auto 0;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 210px;
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 8px 36px 8px 14px;
+      border-radius: 999px;
+      border: 1px solid #d6d3cb;
+      background: #faf9f6;
+      font-family: inherit;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .search-box input:focus {
+      border-color: var(--primary);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(27, 77, 62, 0.1);
+    }
+
+    .search-icon {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 0.95rem;
+      pointer-events: none;
+    }
+
+    .gov-select-wrap select {
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--accent);
+      background: #fffdf7;
+      color: var(--primary);
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      outline: none;
+    }
+
+    /* شريط الإدارة العلوي */
     .admin-bar {
       display: none;
       background: #1e293b;
@@ -138,24 +197,29 @@
     .btn-add-new { background: #10b981; color: #fff; }
     .btn-logout-bar { background: #ef4444; color: #fff; }
 
+    .controls-wrapper {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 14px 16px 6px;
+    }
+
     .filters {
       display: flex;
       justify-content: center;
-      gap: 10px;
-      padding: 20px 16px 10px;
+      gap: 8px;
       flex-wrap: wrap;
     }
 
     .filters button {
       border: 1px solid #e2ddd2;
-      background: rgba(255, 255, 255, 0.92);
+      background: rgba(255, 255, 255, 0.94);
       color: var(--text);
-      padding: 8px 20px;
+      padding: 8px 16px;
       border-radius: 999px;
       cursor: pointer;
       font-family: inherit;
       font-weight: 600;
-      font-size: 0.92rem;
+      font-size: 0.88rem;
       transition: all 0.25s ease;
       box-shadow: 0 2px 6px rgba(0,0,0,0.03);
     }
@@ -172,28 +236,69 @@
       box-shadow: 0 6px 14px rgba(27, 77, 62, 0.2);
     }
 
+    .filters button.sale-tab {
+      border-color: rgba(220, 38, 38, 0.35);
+      color: var(--sale);
+    }
+
+    .filters button.sale-tab.active {
+      background: linear-gradient(135deg, #dc2626, #b91c1c);
+      color: #fff;
+      border-color: #dc2626;
+      box-shadow: 0 6px 14px rgba(220, 38, 38, 0.25);
+    }
+
+    /* شريط المحافظات السريع */
+    .gov-pills {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 12px 4px 6px;
+      justify-content: flex-start;
+      scrollbar-width: thin;
+    }
+
+    @media (min-width: 1024px) {
+      .gov-pills { justify-content: center; flex-wrap: wrap; }
+    }
+
+    .gov-pill {
+      border: 1px solid #e5e0d5;
+      background: rgba(255,255,255,0.88);
+      color: var(--muted);
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .gov-pill:hover { border-color: var(--accent); color: var(--primary); }
+    .gov-pill.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(265px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(275px, 1fr));
       gap: 24px;
-      padding: 20px 24px 48px;
+      padding: 16px 24px 48px;
       max-width: 1220px;
       margin: auto;
     }
 
     @keyframes cardEntrance {
-      from {
-        opacity: 0;
-        transform: translateY(14px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .card {
-      background: rgba(255, 255, 255, 0.96);
+      background: rgba(255, 255, 255, 0.97);
       border-radius: 16px;
       overflow: hidden;
       box-shadow: 0 6px 20px rgba(27, 77, 62, 0.06);
@@ -202,6 +307,7 @@
       flex-direction: column;
       transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
       animation: cardEntrance 0.45s ease backwards;
+      position: relative;
     }
 
     .card:hover {
@@ -213,6 +319,7 @@
       overflow: hidden;
       background: #f3f1ec;
       height: 325px;
+      position: relative;
     }
 
     .card img {
@@ -223,12 +330,67 @@
       transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    .card:hover .card img {
+    .card:hover .card-img-wrap img {
       transform: scale(1.04);
     }
 
+    /* شارة التخفيض / العرض */
+    .sale-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: linear-gradient(135deg, #dc2626, #b91c1c);
+      color: #fff;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 999px;
+      box-shadow: 0 4px 10px rgba(220, 38, 38, 0.3);
+      z-index: 2;
+    }
+
+    /* شارة القسم */
+    .cat-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(27, 77, 62, 0.88);
+      color: #fff;
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 999px;
+      z-index: 2;
+    }
+
+    /* أيقونة السلة العائمة على صورة المنتج */
+    .cart-fab {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(27, 77, 62, 0.35);
+      transition: transform 0.2s ease, background 0.2s ease;
+      z-index: 2;
+      font-size: 1.15rem;
+    }
+
+    .cart-fab:hover {
+      transform: scale(1.1);
+      background: var(--accent);
+    }
+
     .card-body {
-      padding: 16px 18px 18px;
+      padding: 15px 18px 18px;
       flex: 1;
       display: flex;
       flex-direction: column;
@@ -242,15 +404,46 @@
       color: var(--text);
     }
 
+    /* صندوق تفاصيل القماش والخامة تحت الصورة */
+    .fabric-details {
+      margin: 8px 0 6px;
+      padding: 7px 10px;
+      background: #f8f6f0;
+      border-right: 3px solid var(--accent);
+      border-radius: 6px;
+      font-size: 0.83rem;
+      color: #4b5563;
+      line-height: 1.5;
+    }
+
+    .gov-tag-line {
+      font-size: 0.77rem;
+      color: var(--primary);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 6px 0 10px;
+    }
+
     .price {
       font-weight: 700;
       color: var(--accent);
       font-size: 1.15rem;
-      margin: 8px 0 10px;
+    }
+
+    .old-price {
+      font-size: 0.92rem;
+      color: #9ca3af;
+      text-decoration: line-through;
     }
 
     .option-label {
-      font-size: 0.84rem;
+      font-size: 0.83rem;
       color: var(--muted);
       font-weight: 600;
     }
@@ -259,7 +452,7 @@
       display: flex;
       gap: 6px;
       flex-wrap: wrap;
-      margin: 6px 0 10px;
+      margin: 5px 0 9px;
       align-items: center;
     }
 
@@ -267,7 +460,7 @@
       border: 1px solid #d6d3cb;
       padding: 4px 11px;
       border-radius: 7px;
-      font-size: 0.84rem;
+      font-size: 0.83rem;
       font-weight: 600;
       cursor: pointer;
       background: #fff;
@@ -282,7 +475,6 @@
       transform: scale(1.03);
     }
 
-    /* عرض الألوان بالاسم مع دائرة لونية */
     .color-chip {
       display: inline-flex;
       align-items: center;
@@ -291,7 +483,7 @@
       background: #fff;
       padding: 4px 10px;
       border-radius: 999px;
-      font-size: 0.82rem;
+      font-size: 0.81rem;
       cursor: pointer;
       transition: all 0.2s ease;
     }
@@ -314,24 +506,49 @@
       flex-shrink: 0;
     }
 
-    .btn-order {
-      display: block;
-      text-align: center;
+    .card-cta-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .btn-order-form {
+      flex: 1;
+      border: none;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: #fff;
+      padding: 10px 10px;
+      border-radius: 10px;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 4px 12px rgba(27, 77, 62, 0.2);
+      transition: transform 0.2s ease;
+    }
+
+    .btn-order-form:hover { transform: translateY(-2px); }
+
+    .btn-wa-quick {
       background: linear-gradient(135deg, #25D366, #1fb858);
       color: #fff;
       text-decoration: none;
       padding: 10px 12px;
       border-radius: 10px;
       font-weight: 700;
-      margin-top: 12px;
+      font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       box-shadow: 0 4px 12px rgba(37, 211, 102, 0.22);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      transition: transform 0.2s ease;
     }
 
-    .btn-order:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(37, 211, 102, 0.32);
-    }
+    .btn-wa-quick:hover { transform: translateY(-2px); }
 
     /* أزرار التعديل والحذف للمدير */
     .admin-actions { display: flex; gap: 8px; margin-top: 10px; }
@@ -363,42 +580,97 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.6);
-      backdrop-filter: blur(3px);
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(4px);
       justify-content: center;
       align-items: center;
       z-index: 100;
-      padding: 16px;
+      padding: 14px;
     }
 
     .modal-content {
       background: #fff;
-      padding: 24px;
-      border-radius: 14px;
+      padding: 22px;
+      border-radius: 16px;
       width: 100%;
-      max-width: 450px;
-      max-height: 90vh;
+      max-width: 490px;
+      max-height: 92vh;
       overflow-y: auto;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      box-shadow: 0 20px 45px rgba(0,0,0,0.24);
       animation: cardEntrance 0.25s ease;
+    }
+
+    .modal-content h3 {
+      color: var(--primary);
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
     }
 
     .modal-content label {
       display: block;
-      font-size: 0.85rem;
+      font-size: 0.84rem;
       font-weight: 700;
       margin-top: 8px;
-      color: #444;
+      color: #374151;
     }
 
-    .modal-content input, .modal-content select {
+    .modal-content input, .modal-content select, .modal-content textarea {
       width: 100%;
-      padding: 10px;
+      padding: 9px 11px;
       margin: 4px 0 8px;
       border: 1px solid #cbd5e1;
       border-radius: 8px;
       font-family: inherit;
+      font-size: 0.9rem;
     }
+
+    .form-row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .gov-checkbox-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      background: #f9fafb;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+      margin: 6px 0 10px;
+    }
+
+    .gov-check-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .gov-check-item input {
+      width: auto;
+      margin: 0;
+    }
+
+    .sale-check-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      padding: 9px 12px;
+      border-radius: 8px;
+      margin: 8px 0;
+      font-weight: 700;
+      color: #b91c1c;
+      font-size: 0.88rem;
+      cursor: pointer;
+    }
+
+    .sale-check-box input { width: auto; margin: 0; }
 
     .preset-colors { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px; }
     .preset-btn {
@@ -421,11 +693,22 @@
       background: var(--primary);
       color: #fff;
       border: none;
-      border-radius: 8px;
+      border-radius: 9px;
       cursor: pointer;
       font-family: inherit;
       font-weight: 700;
       margin-top: 8px;
+      font-size: 0.95rem;
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 48px 16px;
+      color: var(--muted);
+      background: rgba(255,255,255,0.85);
+      border-radius: 16px;
+      border: 1px dashed #d6d3cb;
     }
   </style>
 </head>
@@ -448,13 +731,26 @@
     <h1 id="storeTitle" title="شركة فنون للمحجبات">شركة فنون للمحجبات</h1>
   </div>
   <div class="subtitle-tag">أناقة محتشمة • جودة وتفاصيل</div>
+
+  <!-- شريط البحث واختيار المحافظة في الأعلى -->
+  <div class="top-search-bar">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="ابحثي عن موديل، نوع قماش، أو تفاصيل..." oninput="handleSearch(this.value)" />
+    </div>
+    <div class="gov-select-wrap">
+      <select id="govDropdown" onchange="filterGovernorate(this.value)">
+        <option value="الكل">📍 كل المحافظات</option>
+      </select>
+    </div>
+  </div>
 </header>
 
-<div class="filters" id="categoryFilters">
-  <button class="active" onclick="filterItems('الكل', this)">الكل</button>
-  <button onclick="filterItems('عبايات', this)">عبايات</button>
-  <button onclick="filterItems('فساتين', this)">فساتين</button>
-  <button onclick="filterItems('أطقم', this)">أطقم</button>
+<div class="controls-wrapper">
+  <div class="filters" id="categoryFilters"></div>
+
+  <!-- أزرار المحافظات السريعة -->
+  <div class="gov-pills" id="govPillsBar"></div>
 </div>
 
 <div class="grid" id="catalogGrid"></div>
@@ -470,7 +766,7 @@
   </div>
 </div>
 
-<!-- نافذة إضافة / تعديل موديل -->
+<!-- نافذة إضافة / تعديل موديل للمدير -->
 <div class="modal" id="adminModal">
   <div class="modal-content">
     <h3 id="modalTitle" style="margin-top:0">إضافة موديل جديد</h3>
@@ -479,15 +775,37 @@
     <label>اسم الموديل</label>
     <input type="text" id="pName" placeholder="مثال: عباية ريم" />
 
-    <label>السعر</label>
-    <input type="text" id="pPrice" placeholder="مثال: 40$" />
+    <div class="form-row-2">
+      <div>
+        <label>السعر الحالي</label>
+        <input type="text" id="pPrice" placeholder="مثال: 35$" />
+      </div>
+      <div>
+        <label>السعر قبل التخفيض (اختياري)</label>
+        <input type="text" id="pOldPrice" placeholder="مثال: 45$" />
+      </div>
+    </div>
 
     <label>القسم</label>
-    <select id="pCat">
-      <option value="عبايات">عبايات</option>
-      <option value="فساتين">فساتين</option>
-      <option value="أطقم">أطقم</option>
-    </select>
+    <select id="pCat"></select>
+
+    <label class="sale-check-box">
+      <input type="checkbox" id="pIsSale" />
+      <span>إظهار ضمن قسم "التخفيضات والعروض"</span>
+    </label>
+
+    <label>شارة العرض (اختياري)</label>
+    <input type="text" id="pSaleLabel" placeholder="مثال: تخفيض خاص أو كمية محدودة" />
+
+    <label>تفاصيل القماش والخامة (تظهر تحت الصورة)</label>
+    <textarea id="pDetails" rows="2" placeholder="مثال: قماش كريب ملكي فاخر، مبطن بالكامل، بدون وبّرة..."></textarea>
+
+    <label>المحافظات المتوفر فيها هذا الموديل</label>
+    <div style="margin:4px 0">
+      <button type="button" class="preset-btn" onclick="toggleAllGovs(true)">تحديد كل المحافظات</button>
+      <button type="button" class="preset-btn" onclick="toggleAllGovs(false)">إلغاء التحديد</button>
+    </div>
+    <div class="gov-checkbox-grid" id="adminGovCheckboxes"></div>
 
     <label>المقاسات (مفصولة بفاصلة)</label>
     <input type="text" id="pSizes" placeholder="مثال: ستاندر أو S, M, L, XL" />
@@ -504,6 +822,57 @@
   </div>
 </div>
 
+<!-- نافذة السلة وإتمام الطلب التفصيلي -->
+<div class="modal" id="orderModal">
+  <div class="modal-content">
+    <h3 style="margin-top:0">🛒 إتمام طلب المنتج</h3>
+    <input type="hidden" id="orderProductId" />
+
+    <label>اسم المنتج</label>
+    <input type="text" id="ordProductName" readonly style="background:#f3f4f6; font-weight:700;" />
+
+    <label>نوع الخامة والتفاصيل</label>
+    <input type="text" id="ordFabric" placeholder="نوع القماش / الخامة" />
+
+    <div class="form-row-2">
+      <div>
+        <label>اللون المطلوب</label>
+        <input type="text" id="ordColor" placeholder="مثال: أسود" />
+      </div>
+      <div>
+        <label>المقاس (إن وجد)</label>
+        <input type="text" id="ordSize" placeholder="مثال: L أو ستاندر" />
+      </div>
+    </div>
+
+    <div class="form-row-2">
+      <div>
+        <label>الطول الكامل (سم)</label>
+        <input type="text" id="ordHeight" placeholder="مثال: 162 سم" />
+      </div>
+      <div>
+        <label>الوزن (كغ)</label>
+        <input type="text" id="ordWeight" placeholder="مثال: 65 كغ" />
+      </div>
+    </div>
+
+    <label>اسم المستلم الكامل</label>
+    <input type="text" id="ordCustomerName" placeholder="الاسم والكنية" />
+
+    <label>رقم هاتف المستلم (واتساب / اتصال)</label>
+    <input type="tel" id="ordPhone" placeholder="مثال: 09xxxxxxxx" />
+
+    <label>المحافظة والعنوان التفصيلي</label>
+    <input type="text" id="ordAddress" placeholder="المحافظة - المدينة / الحي - أقرب نقطة دالة" />
+
+    <label>ملاحظات تهم المصمم (حمل، إرضاع، تعديل طول أو قصة...)</label>
+    <textarea id="ordNotes" rows="3" placeholder="اكتبي هنا إذا كان هناك حمل أو إرضاع أو أي تفاصيل خاصة بالمقاس..."></textarea>
+
+    <button class="btn-admin" style="background:#25D366;" onclick="submitOrderToWhatsApp()">إرسال الطلب عبر واتساب</button>
+    <button class="btn-admin" style="background:#6b7280;" onclick="closeModals()">إلغاء</button>
+  </div>
+</div>
+
 <!-- سكربت مستقل لفتح نافذة الإدارة فوراً دون انتظار الشبكة -->
 <script>
   window.isAdminLoggedIn = false;
@@ -511,6 +880,7 @@
   window.closeModals = function() {
     document.getElementById('loginModal').style.display = 'none';
     document.getElementById('adminModal').style.display = 'none';
+    document.getElementById('orderModal').style.display = 'none';
   };
 
   window.triggerAdminModal = function() {
@@ -549,7 +919,7 @@
   import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   const firebaseConfig = {
-    apiKey: "AIzaSyC7FfNlHV2UFgTvurRlBBrS3guVj0IbtdM",
+    apiKey: "AIzaSyC7FfNlHV2UFgTvurRLBBrS3guVj0IbtdM",
     authDomain: "catalog-be02b.firebaseapp.com",
     projectId: "catalog-be02b",
     storageBucket: "catalog-be02b.firebasestorage.app",
@@ -558,30 +928,39 @@
     measurementId: "G-WX5MM9B0Q5"
   };
 
-  // رقم الواتساب بدون علامة +
   const WHATSAPP_NUMBER = "963985145291";
 
-  // قائمة الألوان المعتمدة وأكوادها البصرية
+  const CATEGORIES = [
+    "خمارات",
+    "صداري",
+    "أطقم",
+    "مشالح",
+    "عبايات",
+    "فساتين",
+    "كابات",
+    "مانطو",
+    "أغطية صلاة"
+  ];
+
+  const SYRIA_GOVERNORATES = [
+    "حلب", "إدلب", "دمشق", "ريف دمشق", "حمص", "حماة",
+    "اللاذقية", "طرطوس", "درعا", "السويداء", "القنيطرة",
+    "دير الزور", "الرقة", "الحسكة"
+  ];
+
   const COLOR_MAP = {
-    "أسود": "#111111",
-    "اسود": "#111111",
+    "أسود": "#111111", "اسود": "#111111",
     "بيج": "#e5d3b3",
-    "أبيض": "#ffffff",
-    "ابيض": "#ffffff",
+    "أبيض": "#ffffff", "ابيض": "#ffffff",
     "سكري": "#f5f0e1",
-    "أخضر": "#1f7a4c",
-    "اخضر": "#1f7a4c",
-    "أحمر": "#dc2626",
-    "احمر": "#dc2626",
+    "أخضر": "#1f7a4c", "اخضر": "#1f7a4c",
+    "أحمر": "#dc2626", "احمر": "#dc2626",
     "قرميدي": "#b4532a",
     "زهري": "#f472b6",
-    "أزرق شامي": "#1d4ed8",
-    "ازرق شامي": "#1d4ed8",
-    "أزرق فاتح": "#7dd3fc",
-    "ازرق فاتح": "#7dd3fc",
+    "أزرق شامي": "#1d4ed8", "ازرق شامي": "#1d4ed8",
+    "أزرق فاتح": "#7dd3fc", "ازرق فاتح": "#7dd3fc",
     "بني": "#6b4423",
-    "أصفر": "#facc15",
-    "اصفر": "#facc15",
+    "أصفر": "#facc15", "اصفر": "#facc15",
     "فضي": "#cbd5e1"
   };
 
@@ -606,6 +985,45 @@
     return clean;
   }
 
+  function initCategoriesUI() {
+    const filtersEl = document.getElementById("categoryFilters");
+    const pCatSelect = document.getElementById("pCat");
+
+    filtersEl.innerHTML =
+      `<button class="active" onclick="filterItems('الكل', this)">الكل</button>` +
+      CATEGORIES.map(cat => `<button onclick="filterItems('${cat}', this)">${cat}</button>`).join("") +
+      `<button class="sale-tab" onclick="filterItems('التخفيضات والعروض', this)">🔥 التخفيضات والعروض</button>`;
+
+    pCatSelect.innerHTML = CATEGORIES.map(cat => `<option value="${cat}">${cat}</option>`).join("");
+  }
+
+  function initGovernorateUI() {
+    const dropdown = document.getElementById("govDropdown");
+    const pillsBar = document.getElementById("govPillsBar");
+    const adminBox = document.getElementById("adminGovCheckboxes");
+
+    pillsBar.innerHTML = `<button class="gov-pill active" data-gov="الكل" onclick="filterGovernorate('الكل')">كل المحافظات</button>` +
+      SYRIA_GOVERNORATES.map(g => `<button class="gov-pill" data-gov="${g}" onclick="filterGovernorate('${g}')">${g}</button>`).join("");
+
+    SYRIA_GOVERNORATES.forEach(g => {
+      const opt = document.createElement("option");
+      opt.value = g;
+      opt.textContent = g;
+      dropdown.appendChild(opt);
+    });
+
+    adminBox.innerHTML = SYRIA_GOVERNORATES.map(g => `
+      <label class="gov-check-item">
+        <input type="checkbox" name="adminGov" value="${g}" />
+        <span>${g}</span>
+      </label>
+    `).join("");
+  }
+
+  window.toggleAllGovs = function(checked) {
+    document.querySelectorAll('input[name="adminGov"]').forEach(cb => cb.checked = checked);
+  };
+
   function renderColorPresets() {
     const box = document.getElementById("presetColorsBox");
     box.innerHTML = AVAILABLE_COLORS.map(name => `
@@ -618,34 +1036,25 @@
 
   window.togglePresetColor = function(colorName) {
     const input = document.getElementById("pColors");
-    const list = input.value
-      .split(/[,،]/)
-      .map(c => c.trim())
-      .filter(Boolean);
-
+    const list = input.value.split(/[,،]/).map(c => c.trim()).filter(Boolean);
     const idx = list.indexOf(colorName);
-    if (idx > -1) {
-      list.splice(idx, 1);
-    } else {
-      list.push(colorName);
-    }
+    if (idx > -1) list.splice(idx, 1);
+    else list.push(colorName);
     input.value = list.join("، ");
     syncPresetButtons();
   };
 
   window.syncPresetButtons = function() {
     const input = document.getElementById("pColors");
-    const list = input.value
-      .split(/[,،]/)
-      .map(c => c.trim())
-      .filter(Boolean);
-
+    const list = input.value.split(/[,،]/).map(c => c.trim()).filter(Boolean);
     document.querySelectorAll("#presetColorsBox .preset-btn").forEach(btn => {
       const cName = btn.getAttribute("data-color");
       btn.classList.toggle("active", list.includes(cName));
     });
   };
 
+  initCategoriesUI();
+  initGovernorateUI();
   renderColorPresets();
 
   const app = initializeApp(firebaseConfig);
@@ -654,6 +1063,8 @@
 
   let allProducts = [];
   let currentFilter = 'الكل';
+  let currentGov = 'الكل';
+  let searchQuery = '';
   const selections = {};
 
   const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
@@ -685,16 +1096,91 @@
     }
   };
 
+  window.openOrderModal = function(productId) {
+    const item = allProducts.find(p => p.id === productId);
+    if (!item) return;
+    const sel = selections[productId] || {};
+
+    document.getElementById('orderProductId').value = item.id;
+    document.getElementById('ordProductName').value = `${item.name} (${item.price})`;
+    document.getElementById('ordFabric').value = item.details || '';
+    document.getElementById('ordColor').value = sel.color || (Array.isArray(item.colors) && item.colors[0] ? item.colors[0] : '');
+    document.getElementById('ordSize').value = sel.size || (Array.isArray(item.sizes) && item.sizes[0] ? item.sizes[0] : '');
+    document.getElementById('ordAddress').value = currentGov !== 'الكل' ? `${currentGov} - ` : '';
+    document.getElementById('orderModal').style.display = 'flex';
+  };
+
+  window.submitOrderToWhatsApp = function() {
+    const pName = document.getElementById('ordProductName').value.trim();
+    const fabric = document.getElementById('ordFabric').value.trim();
+    const color = document.getElementById('ordColor').value.trim();
+    const size = document.getElementById('ordSize').value.trim();
+    const height = document.getElementById('ordHeight').value.trim();
+    const weight = document.getElementById('ordWeight').value.trim();
+    const cName = document.getElementById('ordCustomerName').value.trim();
+    const phone = document.getElementById('ordPhone').value.trim();
+    const address = document.getElementById('ordAddress').value.trim();
+    const notes = document.getElementById('ordNotes').value.trim();
+
+    if (!cName || !phone || !address) {
+      alert("يرجى تعبئة اسم المستلم، رقم الهاتف، والعنوان لإتمام الطلب.");
+      return;
+    }
+
+    const lines = [
+      `🛍️ *طلب جديد من كتالوج شركة فنون للمحجبات*`,
+      `• *المنتج:* ${pName}`,
+      fabric ? `• *نوع الخامة:* ${fabric}` : '',
+      color ? `• *اللون:* ${color}` : '',
+      size ? `• *المقاس:* ${size}` : '',
+      height ? `• *الطول الكامل:* ${height}` : '',
+      weight ? `• *الوزن:* ${weight}` : '',
+      `------------------`,
+      `• *اسم المستلم:* ${cName}`,
+      `• *رقم الهاتف:* ${phone}`,
+      `• *العنوان:* ${address}`,
+      notes ? `• *ملاحظات للمصمم (حمل/إرضاع/تعديل):* ${notes}` : ''
+    ].filter(Boolean).join('\n');
+
+    const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines)}`;
+    window.open(waUrl, '_blank');
+    window.closeModals();
+  };
+
   window.renderCatalog = function() {
     const grid = document.getElementById('catalogGrid');
     grid.innerHTML = '';
-    const filtered = currentFilter === 'الكل'
-      ? allProducts
-      : allProducts.filter(p => p.category === currentFilter);
+
+    const filtered = allProducts.filter(p => {
+      const matchesCat = currentFilter === 'الكل'
+        ? true
+        : currentFilter === 'التخفيضات والعروض'
+          ? Boolean(p.isSale)
+          : p.category === currentFilter;
+
+      const pGovs = Array.isArray(p.governorates) ? p.governorates : [];
+      const matchesGov = currentGov === 'الكل'
+        ? true
+        : (pGovs.length === 0 || pGovs.includes(currentGov));
+
+      const qLower = searchQuery.toLowerCase();
+      const matchesSearch = !qLower
+        || (p.name && p.name.toLowerCase().includes(qLower))
+        || (p.details && p.details.toLowerCase().includes(qLower))
+        || (p.category && p.category.toLowerCase().includes(qLower));
+
+      return matchesCat && matchesGov && matchesSearch;
+    });
+
+    if (filtered.length === 0) {
+      grid.innerHTML = `<div class="empty-state">لا توجد موديلات مطابقة لخيارات البحث أو القسم أو المحافظة المحددة حالياً.</div>`;
+      return;
+    }
 
     filtered.forEach((item, index) => {
       const sizes = Array.isArray(item.sizes) ? item.sizes : [];
       const colors = Array.isArray(item.colors) ? item.colors : [];
+      const pGovs = Array.isArray(item.governorates) ? item.governorates : [];
       const currentSel = selections[item.id] || {};
       const delay = Math.min(index * 45, 300);
 
@@ -716,6 +1202,26 @@
         `;
       }).join('');
 
+      const saleBadgeHtml = item.isSale
+        ? `<span class="sale-badge">🔥 ${item.saleLabel || 'تخفيض وعرض خاص'}</span>`
+        : '';
+
+      const catBadgeHtml = item.category
+        ? `<span class="cat-badge">${item.category}</span>`
+        : '';
+
+      const oldPriceHtml = item.oldPrice
+        ? `<span class="old-price">${item.oldPrice}</span>`
+        : '';
+
+      const detailsHtml = item.details
+        ? `<div class="fabric-details">🧵 ${item.details}</div>`
+        : '';
+
+      const govsLineHtml = pGovs.length > 0
+        ? `<div class="gov-tag-line">📍 متوفر في: ${pGovs.length === SYRIA_GOVERNORATES.length ? 'جميع المحافظات' : pGovs.join('، ')}</div>`
+        : '';
+
       const adminControls = window.isAdminLoggedIn
         ? `<div class="admin-actions">
              <button class="btn-edit" onclick="openEditModal('${item.id}')">تعديل</button>
@@ -728,17 +1234,28 @@
       grid.innerHTML += `
         <div class="card" style="animation-delay: ${delay}ms">
           <div class="card-img-wrap">
+            ${saleBadgeHtml}
+            ${catBadgeHtml}
             <img src="${imgSrc}" alt="${item.name}" loading="lazy" />
+            <button type="button" class="cart-fab" title="إضافة للسلة وإدخال قياسات الطلب" onclick="openOrderModal('${item.id}')">🛒</button>
           </div>
           <div class="card-body">
             <div>
               <h3 class="card-title">${item.name}</h3>
-              <div class="price">${item.price}</div>
+              ${detailsHtml}
+              ${govsLineHtml}
+              <div class="price-row">
+                <span class="price">${item.price}</span>
+                ${oldPriceHtml}
+              </div>
               <div><span class="option-label">المقاسات:</span><div class="tags">${sizesHtml}</div></div>
               <div><span class="option-label">الألوان:</span><div class="tags">${colorsHtml}</div></div>
             </div>
             <div>
-              <a id="order-link-${item.id}" class="btn-order" href="${buildWhatsAppUrl(item)}" target="_blank">اطلب عبر واتساب</a>
+              <div class="card-cta-row">
+                <button type="button" class="btn-order-form" onclick="openOrderModal('${item.id}')">🛒 اطلب بالمقاس والبيانات</button>
+                <a id="order-link-${item.id}" class="btn-wa-quick" href="${buildWhatsAppUrl(item)}" target="_blank" title="استفسار سريع عبر واتساب">واتساب</a>
+              </div>
               ${adminControls}
             </div>
           </div>
@@ -751,6 +1268,20 @@
     currentFilter = cat;
     document.querySelectorAll('.filters button').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
+    renderCatalog();
+  };
+
+  window.filterGovernorate = function(gov) {
+    currentGov = gov;
+    document.getElementById('govDropdown').value = gov;
+    document.querySelectorAll('.gov-pill').forEach(pill => {
+      pill.classList.toggle('active', pill.getAttribute('data-gov') === gov);
+    });
+    renderCatalog();
+  };
+
+  window.handleSearch = function(val) {
+    searchQuery = (val || '').trim();
     renderCatalog();
   };
 
@@ -776,10 +1307,15 @@
     document.getElementById('editProductId').value = "";
     document.getElementById('pName').value = "";
     document.getElementById('pPrice').value = "";
-    document.getElementById('pCat').value = "عبايات";
+    document.getElementById('pOldPrice').value = "";
+    document.getElementById('pCat').value = CATEGORIES[0];
+    document.getElementById('pIsSale').checked = false;
+    document.getElementById('pSaleLabel').value = "";
+    document.getElementById('pDetails').value = "";
     document.getElementById('pSizes').value = "";
     document.getElementById('pColors').value = "";
     document.getElementById('pImg').value = "";
+    toggleAllGovs(true);
     syncPresetButtons();
     document.getElementById('adminModal').style.display = 'flex';
   };
@@ -791,10 +1327,20 @@
     document.getElementById('editProductId').value = item.id;
     document.getElementById('pName').value = item.name || "";
     document.getElementById('pPrice').value = item.price || "";
-    document.getElementById('pCat').value = item.category || "عبايات";
+    document.getElementById('pOldPrice').value = item.oldPrice || "";
+    document.getElementById('pCat').value = CATEGORIES.includes(item.category) ? item.category : CATEGORIES[0];
+    document.getElementById('pIsSale').checked = Boolean(item.isSale);
+    document.getElementById('pSaleLabel').value = item.saleLabel || "";
+    document.getElementById('pDetails').value = item.details || "";
     document.getElementById('pSizes').value = Array.isArray(item.sizes) ? item.sizes.join('، ') : "";
     document.getElementById('pColors').value = Array.isArray(item.colors) ? item.colors.join('، ') : "";
     document.getElementById('pImg').value = item.img || "";
+
+    const pGovs = Array.isArray(item.governorates) ? item.governorates : [];
+    document.querySelectorAll('input[name="adminGov"]').forEach(cb => {
+      cb.checked = pGovs.length === 0 ? true : pGovs.includes(cb.value);
+    });
+
     syncPresetButtons();
     document.getElementById('adminModal').style.display = 'flex';
   };
@@ -803,17 +1349,25 @@
     const editId = document.getElementById('editProductId').value;
     const name = document.getElementById('pName').value.trim();
     const price = document.getElementById('pPrice').value.trim();
+    const oldPrice = document.getElementById('pOldPrice').value.trim();
     const category = document.getElementById('pCat').value;
+    const isSale = document.getElementById('pIsSale').checked;
+    const saleLabel = document.getElementById('pSaleLabel').value.trim();
+    const details = document.getElementById('pDetails').value.trim();
     const sizes = document.getElementById('pSizes').value.split(/[,،]/).map(s => s.trim()).filter(Boolean);
     const colors = document.getElementById('pColors').value.split(/[,،]/).map(c => c.trim()).filter(Boolean);
     const img = normalizeImageUrl(document.getElementById('pImg').value.trim());
+    const governorates = Array.from(document.querySelectorAll('input[name="adminGov"]:checked')).map(cb => cb.value);
 
     if (!name || !price) {
       alert("يرجى إدخال اسم الموديل والسعر");
       return;
     }
 
-    const payload = { name, price, category, sizes, colors, img };
+    const payload = {
+      name, price, oldPrice, category, isSale, saleLabel,
+      details, governorates, sizes, colors, img
+    };
 
     try {
       if (editId) {
