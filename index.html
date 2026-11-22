@@ -31,29 +31,27 @@
       overflow-x: hidden;
     }
 
-    /* علامة مائية شفافة للوغو في الخلفية لا تعيق النقر */
+    /* علامة مائية كبيرة على كامل الصفحة لا تعيق النقر */
     .watermark-layer {
       position: fixed;
       inset: 0;
       pointer-events: none;
       z-index: 0;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      display: flex;
       align-items: center;
-      justify-items: center;
-      gap: 44px;
-      padding: 28px;
-      opacity: 0.055;
+      justify-content: center;
+      overflow: hidden;
       user-select: none;
     }
 
-    .watermark-logo {
-      width: 118px;
-      height: 118px;
+    .watermark-hero {
+      width: min(76vw, 76vh, 660px);
+      height: min(76vw, 76vh, 660px);
       border-radius: 50%;
       object-fit: cover;
-      transform: rotate(-14deg);
-      box-shadow: 0 0 0 2px rgba(197, 155, 39, 0.25);
+      opacity: 0.065;
+      filter: saturate(0.85) contrast(1.05);
+      box-shadow: 0 0 80px rgba(197, 155, 39, 0.08);
     }
 
     header, .admin-bar, .filters, .grid, .modal {
@@ -195,7 +193,7 @@
     }
 
     .card {
-      background: var(--card-bg);
+      background: rgba(255, 255, 255, 0.96);
       border-radius: 16px;
       overflow: hidden;
       box-shadow: 0 6px 20px rgba(27, 77, 62, 0.06);
@@ -433,20 +431,9 @@
 </head>
 <body>
 
-<!-- علامة مائية شفافة للوغو خلف المحتوى -->
+<!-- علامة مائية كبيرة للوغو على كامل الصفحة -->
 <div class="watermark-layer" aria-hidden="true">
-  <img class="watermark-logo" src="./WhatsApp%20Image%202026-11-10%20at%201.23.30%20AM.jpeg" alt="" />
-  <img class="watermark-logo" src="./WhatsApp%20Image%202026-11-10%20at%201.23.30%20AM.jpeg" alt="" />
-  <img class="watermark-logo" src="./WhatsApp%20Image%202026-11-10%20at%201.23.30%20AM.jpeg" alt="" />
-  <img class="watermark-logo" src="./WhatsApp%20Image%202026-11-10%20at%201.23.30%20AM.jpeg" alt="" />
-  <img class="watermark-logo" src="./WhatsApp%20Image%202026-11-10%20at%201.23.30%20AM.jpeg" alt="" />
-  <img class="watermark-logo" src="./WhatsApp%20Image%202026-11-10%20at%201.23.30%20AM.jpeg" alt="" />
-  <img class="watermark-logo" src="./WhatsApp%20Image%202026-11-10%20at%201.23.30%20AM.jpeg" alt="" />
-  <img class="watermark-logo" src="./WhatsApp%20Image%202026-11-10%20at%201.23.30%20AM.jpeg" alt="" />
-  <img class="watermark-logo" src="./WhatsApp%20Image%202026-11-10%20at%201.23.30%20AM.jpeg" alt="" />
-  <img class="watermark-logo" src="./WhatsApp%20Image%202026-11-10%20at%201.23.30%20AM.jpeg" alt="" />
-  <img class="watermark-logo" src="./WhatsApp%20Image%202026-11-10%20at%201.23.30%20AM.jpeg" alt="" />
-  <img class="watermark-logo" src="./WhatsApp%20Image%202026-11-10%20at%201.23.30%20AM.jpeg" alt="" />
+  <img class="watermark-hero" src="./WhatsApp%20Image%202026-11-10%20at%201.23.30%20AM.jpeg" alt="" />
 </div>
 
 <div class="admin-bar" id="adminBar">
